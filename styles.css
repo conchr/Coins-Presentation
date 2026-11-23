@@ -1,0 +1,428 @@
+/* ============================================================
+   0. FONTS & TOKENS  (από Museum_Context.json)
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --bg-deep: #080b16;
+  --bg-mid: #0f1424;
+  --bg-surface: rgba(22, 27, 46, 0.72);
+
+  --gold: #d4af37;
+  --gold-light: #f0c75e;
+  --gold-dark: #a8842c;
+
+  --purple: #8b5cf6;
+  --green: #3cb371;
+  --red: #dc2626;
+  --amber: #f59e0b;
+  --blue: #60a5fa;
+
+  --text-primary: #f0f2f8;
+  --text-secondary: #a8aec5;
+  --text-muted: #6c7490;
+
+  --border-subtle: rgba(212, 175, 55, 0.12);
+  --border-strong: rgba(212, 175, 55, 0.35);
+  --border-white: rgba(255, 255, 255, 0.08);
+
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+
+  --shadow-card: 0 24px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(212, 175, 55, 0.08);
+  --shadow-glow: 0 0 40px rgba(212, 175, 55, 0.25), 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.4);
+
+  --transition-fast: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --font-display: 'Cormorant Garamond', serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* ============================================================
+   1. RESET & BODY
+   ============================================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Shared background (radial gradients + grid) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 0%, rgba(139, 92, 246, 0.16), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(212, 175, 55, 0.09), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 0% 100%, rgba(139, 92, 246, 0.08), transparent 60%);
+  z-index: -2;
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(212, 175, 55, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212, 175, 55, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 80%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ============================================================
+   2. PROGRESS BAR (top)
+   ============================================================ */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--purple), var(--gold));
+  z-index: 100;
+  transition: width var(--transition-base);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
+}
+
+/* ============================================================
+   3. SLIDES WRAPPER
+   ============================================================ */
+.slides-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem 5rem; /* Μειώθηκαν τα κενά για να απλώνεται η παρουσίαση */
+}
+
+.slide {
+  display: none;
+  width: 100%;
+  max-width: 1400px; /* Μεγαλύτερο πλάτος */
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 2rem 3rem;
+  animation: fadeIn var(--transition-slow) ease forwards;
+}
+
+.slide.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Custom scrollbar for long slides */
+.slide::-webkit-scrollbar { width: 8px; }
+.slide::-webkit-scrollbar-track { background: transparent; }
+.slide::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 4px;
+}
+
+/* ============================================================
+   4. TYPOGRAPHY
+   ============================================================ */
+.slide-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4.5vw, 3.5rem); /* Πιο μεγάλος τίτλος */
+  font-weight: 600;
+  color: var(--gold-light);
+  letter-spacing: 0.5px;
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+}
+
+.slide-subtitle {
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.slide p {
+  font-size: clamp(1.1rem, 1.6vw, 1.3rem); /* Πιο μεγάλα γράμματα */
+  color: var(--text-secondary);
+  margin-bottom: 1.2rem;
+  max-width: 85ch; /* Πιο πλατύ κείμενο */
+  line-height: 1.7;
+}
+
+.slide p strong { color: var(--text-primary); font-weight: 600; }
+.slide p em { color: var(--gold-light); font-style: normal; }
+
+/* ============================================================
+   5. CONTENT BLOCKS
+   ============================================================ */
+.content-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr; /* Το κείμενο παίρνει λίγο περισσότερο χώρο από την εικόνα */
+  gap: 3rem; /* Μεγαλύτερο κενό μεταξύ κειμένου και εικόνας */
+  margin-top: 1.5rem;
+  align-items: center; /* Κεντράρει κάθετα το κείμενο και την εικόνα */
+}
+
+.content-grid.single { grid-template-columns: 1fr; }
+
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(12px);
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+}
+
+.card-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.card h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.card p {
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+/* Highlight box (για «Τι σημαίνει;») */
+.highlight-box {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.10), rgba(139, 92, 246, 0.08));
+  border-left: 4px solid var(--gold);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: var(--shadow-soft); /* Λίγη σκιά για να ξεχωρίζει */
+}
+
+.highlight-box p {
+  font-size: clamp(1rem, 1.4vw, 1.15rem) !important; /* Πιο μεγάλο κείμενο */
+  color: var(--text-primary) !important;
+  margin-bottom: 0;
+}
+
+/* Quote / dialogue */
+.quote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--gold-light);
+  border-left: 2px solid var(--border-strong);
+  padding-left: 1rem;
+  margin: 1rem 0;
+}
+
+/* Image placeholder — για εικόνες νομισμάτων */
+.image-slot {
+  width: 100%;
+  height: 100%; /* Γεμίζει όλο το ύψος της στήλης */
+  min-height: 350px; /* Ελάχιστο ύψος για να μη μικραίνει πολύ */
+  max-width: 100%; /* Έφυγε το όριο των 280px */
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 1rem;
+  text-align: center;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.image-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Γεμίζει το κουτί χωρίς να παραμορφώνεται */
+  border-radius: var(--radius-md);
+  transition: transform var(--transition-base);
+}
+
+.image-slot img:hover {
+  transform: scale(1.02); /* Μικρό zoom effect στο hover */
+}
+
+/* ============================================================
+   6. FOOTER / NAVIGATION
+   ============================================================ */
+.nav-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  background: linear-gradient(to top, rgba(8, 11, 22, 0.95), transparent);
+  z-index: 50;
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  backdrop-filter: blur(8px);
+}
+
+.nav-btn:hover:not(:disabled) {
+  border-color: var(--border-strong);
+  color: var(--gold-light);
+  box-shadow: var(--shadow-glow);
+}
+
+.nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.page-indicator {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.page-indicator span { color: var(--gold); }
+
+/* ============================================================
+   7. COVER SLIDE
+   ============================================================ */
+.slide.cover {
+  text-align: center;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.slide.cover.active { display: flex; }
+
+.cover-eyebrow {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.cover-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4.5rem); /* Πολύ πιο μεγάλος τίτλος στο εξώφυλλο */
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  max-width: 1100px;
+}
+
+.cover-title em {
+  color: var(--gold-light);
+  font-style: italic;
+}
+
+.cover-divider {
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 1.5rem auto;
+}
+
+.cover-meta {
+  font-size: 1rem;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+/* ============================================================
+   8. RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+  .content-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .slides-wrapper { padding: 2rem 1rem 5rem; }
+  .slide { padding: 1rem; }
+  .image-slot { min-height: 250px; }
+}
+
+@media (max-width: 480px) {
+  .nav-footer { padding: 0 0.75rem; height: 4rem; }
+  .nav-btn { padding: 0.5rem 0.8rem; font-size: 0.75rem; }
+  .page-indicator { font-size: 0.7rem; }
+  .slide-title { font-size: 1.8rem; }
+  .slide p { font-size: 1rem; }
+}
+
+@media (max-height: 620px) {
+  .slides-wrapper { padding: 1rem 1rem 4.5rem; }
+  .slide-title { font-size: 1.6rem; }
+  .image-slot { min-height: 200px; }
+}
+
+/* ============================================================
+   9. ACCESSIBILITY
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.nav-btn:focus-visible,
+.slide:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}

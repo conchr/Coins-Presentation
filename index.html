@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Νομίσματα της Θεσσαλίας — Φάρσαλα & Σκοτούσσα</title>
+  <meta name="description" content="Εκπαιδευτική παρουσίαση για την ιστορία του χρήματος και τα αρχαία νομίσματα των Φαρσάλων και της Σκοτούσσας. Για μαθητές Δ' Δημοτικού." />
+
+  <!-- Tailwind CDN (utility classes) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome CDN (icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- Local styles -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Progress bar (top) -->
+  <div class="progress-bar" id="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+
+  <!-- Slides container -->
+  <main class="slides-wrapper" id="slides-container" aria-live="polite">
+    <!-- Slides δημιουργούνται δυναμικά από το app.js -->
+  </main>
+
+  <!-- Navigation footer -->
+  <footer class="nav-footer">
+    <button class="nav-btn" id="prev-btn" aria-label="Προηγούμενη διαφάνεια">
+      <i class="fa-solid fa-arrow-left"></i>
+      <span>Προηγούμενη</span>
+    </button>
+
+    <div class="page-indicator" id="page-indicator">
+      <span id="current-page">1</span> / <span id="total-pages">1</span>
+    </div>
+
+    <button class="nav-btn" id="next-btn" aria-label="Επόμενη διαφάνεια">
+      <span>Επόμενη</span>
+      <i class="fa-solid fa-arrow-right"></i>
+    </button>
+  </footer>
+
+  <!-- App logic -->
+  <script src="app.js"></script>
+</body>
+</html>
